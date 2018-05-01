@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh $@ --with python2
+
+override_dh_python2:
+	dh_python2 -p w3af-console /usr/share/w3af
+	dh_link -p w3af # make sure /usr/bin symlink is created before dh_python2 cal
+	dh_python2 -p w3af
+
+override_dh_install:
+	dh_install --package=w3af-console \
+              -X db/sqlmap/               \
+              -X /plugins/tests/          \
+              -X /parsers/doc/tests/      \
+              -X pynarcissus/tests/       \
+              -X core/ui/gui/             \
+              -X plugins/infrastructure/oHmap/GPL
+	dh_install --package=w3af
